@@ -1,0 +1,148 @@
+openapi: 3.0.3
+info:
+  title: MSME AI Operating Cockpit API
+  version: "1.0.0"
+  description: >
+    REST API for the MSME Operating Cockpit — covers authentication, core
+    business operations (products, inventory, sales, purchases, expenses),
+    customer credit ledger, supplier/customer intelligence, dashboards,
+    reorder/cash-flow forecasting, notifications and data export/backup.
+servers:
+  - url: http://localhost:4000/api/v1
+    description: Local development
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+paths:
+  /auth/register:
+    post:
+      summary: Register a new business and its owner account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [businessName, ownerName, email, password]
+              properties:
+                businessName: { type: string }
+                ownerName: { type: string }
+                email: { type: string, format: email }
+                password: { type: string, minLength: 6 }
+      responses:
+        "201": { description: Business and owner created, returns a JWT }
+        "400": { description: Invalid input }
+        "409": { description: Email already registered }
+
+  /auth/login:
+    post:
+      summary: Log in and receive a JWT
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        "200": { description: Login successful, returns a JWT }
+        "401": { description: Invalid credentials }
+
+  /products:
+    get:
+      summary: List products for the current business
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+      responses:
+        "200": { description: List of products }
+    post:
+      summary: Create a product (Owner/Manager only)
+      responses:
+        "201": { description: Product created }
+        "403": { description: Insufficient role permissions }
+
+  /sales:
+    post:
+      summary: Create a sale (POS checkout) — computes GST, decrements stock, records credit ledger entry if unpaid
+      responses:
+        "201": { description: Sale created }
+        "400": { description: Insufficient stock, or credit limit exceeded }
+    get:
+      summary: List recent sales
+      responses:
+        "200": { description: List of sales }
+
+  /credit/overview:
+    get:
+      summary: List all customers with outstanding credit balances
+      responses:
+        "200": { description: Credit overview list }
+
+  /credit/payment:
+    post:
+      summary: Record a payment received against a customer's outstanding credit
+      responses:
+        "201": { description: Payment recorded, ledger updated }
+
+  /intelligence/reorder-suggestions:
+    get:
+      summary: Rule-based reorder point suggestions per product
+      responses:
+        "200": { description: List of reorder suggestions }
+
+  /intelligence/health-score:
+    get:
+      summary: Compute the current Business Health Score (0-100)
+      responses:
+        "200": { description: Health score breakdown }
+
+  /intelligence/cash-flow-forecast:
+    get:
+      summary: 30/90-day cash flow forecast (proxies to the Python AI service)
+      parameters:
+        - in: query
+          name: horizon
+          schema: { type: integer, default: 30 }
+      responses:
+        "200": { description: Forecast points }
+        "503": { description: AI service unreachable }
+
+  /notifications:
+    get:
+      summary: List recent notifications and unread count
+      responses:
+        "200": { description: Notifications list }
+
+  /export/sales:
+    get:
+      summary: Download all sales as CSV
+      responses:
+        "200":
+          description: CSV file
+          content:
+            text/csv: {}
+
+  /export/backup:
+    get:
+      summary: Trigger a full PostgreSQL backup (Owner only) and download the dump file
+      responses:
+        "200": { description: Backup file (.dump) }
+        "500": { description: pg_dump not available or failed }

@@ -1,0 +1,81 @@
+# Production-style compose file: builds and runs the ENTIRE stack in
+# containers (unlike docker-compose.yml, which only runs Postgres/Redis for
+# local development while the app runs natively via `npm run dev`).
+#
+# Usage:
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Before running, create a `.env.prod` file in the project root (see
+# .env.prod.example) with real secrets — never commit that file.
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: msme_postgres_prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: msme_redis_prod
+    restart: unless-stopped
+    volumes:
+      - redis_prod_data:/data
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: msme_api_prod
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 7d
+      NODE_ENV: production
+      PORT: 4000
+      AI_SERVICE_URL: http://ai-service:8000
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
+    ports:
+      - "4000:4000"
+
+  ai-service:
+    build:
+      context: ./apps/ai-service
+      dockerfile: Dockerfile
+    container_name: msme_ai_service_prod
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    container_name: msme_web_prod
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_prod_data:
+  redis_prod_data:

@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment files (secrets — NEVER push these)
+.env
+.env.prod
+.env.test
+**/.env
+**/.env.prod
+**/.env.test
+
+# Python virtual environment
+venv/
+**/venv/
+__pycache__/
+*.pyc
+
+# Build outputs
+dist/
+build/
+
+# Editor
+.vscode/
+.DS_Store
+
+# Logs
+*.log
