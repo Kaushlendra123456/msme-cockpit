@@ -24,6 +24,11 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
+    env:
+      DATABASE_URL: postgresql://test_user:test_password@localhost:5432/msme_test?schema=public
+      JWT_SECRET: ci-test-secret-not-for-production
+      JWT_EXPIRES_IN: 1h
+      AI_SERVICE_URL: http://localhost:8000
     steps:
       - uses: actions/checkout@v4
 
@@ -44,15 +49,13 @@ jobs:
 
       - name: Run database migrations
         working-directory: apps/api
-        env:
-          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/msme_test?schema=public
         run: npx prisma migrate deploy
 
       - name: Type-check
         working-directory: apps/api
         run: npx tsc --noEmit
 
-      - name: Run unit tests
+      - name: Run unit and integration tests
         working-directory: apps/api
         run: npm test
 
