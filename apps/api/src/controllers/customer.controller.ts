@@ -46,6 +46,8 @@ export const getCustomerInsights = async (req: Request, res: Response) => {
     id: c.id,
     name: c.name,
     totalSpent: c.totalSpent,
+    creditLimit: c.creditLimit,
+    outstandingCredit: c.outstandingCredit,
     lastPurchaseAt: c.lastPurchaseAt,
     isHighValue: highValueIds.has(c.id),
     isInactive: c.lastPurchaseAt ? c.lastPurchaseAt < sixtyDaysAgo : true,

@@ -41,16 +41,22 @@ export const getCashFlowForecast = async (businessId: string, horizonDays: numbe
   }
 
   try {
-    const response = await axios.post(`${AI_SERVICE_URL}/forecast/cash-flow`, {
-      history,
-      horizon_days: horizonDays,
-    });
+    // 60 second timeout: on free-tier hosting, the AI service may be
+    // "asleep" after inactivity and can take 30-50s to wake up on the
+    // first request. A short timeout would incorrectly report it as down.
+    const response = await axios.post(
+      `${AI_SERVICE_URL}/forecast/cash-flow`,
+      { history, horizon_days: horizonDays },
+      { timeout: 60000 }
+    );
     return response.data;
   } catch (err: any) {
+    const isTimeout = err.code === "ECONNABORTED";
     throw {
       status: 503,
-      message:
-        "The AI forecasting service is not reachable. Make sure it's running (`uvicorn app.main:app --port 8000`).",
+      message: isTimeout
+        ? "The AI forecasting service is waking up (this can take up to a minute on free hosting after inactivity). Please try again in a moment."
+        : "The AI forecasting service is not reachable right now. Please try again shortly.",
     };
   }
 };

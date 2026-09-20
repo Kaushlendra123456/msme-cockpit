@@ -4,6 +4,7 @@ import { api } from "../lib/api";
 interface Supplier {
   id: string;
   name: string;
+  phone?: string;
   avgDeliveryDays: number;
   rating?: number;
   recommendationScore?: number;
@@ -44,6 +45,12 @@ export const Suppliers = () => {
           className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 min-w-[150px]"
         />
         <input
+          placeholder="Phone number"
+          value={form.phone}
+          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm flex-1 min-w-[150px]"
+        />
+        <input
           type="number"
           placeholder="Avg delivery days"
           value={form.avgDeliveryDays}
@@ -61,6 +68,7 @@ export const Suppliers = () => {
             <tr>
               <th className="px-4 py-3">Rank</th>
               <th className="px-4 py-3">Name</th>
+              <th className="px-4 py-3">Phone</th>
               <th className="px-4 py-3">Delivery Days</th>
               <th className="px-4 py-3">Score</th>
             </tr>
@@ -70,12 +78,16 @@ export const Suppliers = () => {
               <tr key={s.id} className="border-t border-gray-100">
                 <td className="px-4 py-3 text-gray-500">#{i + 1}</td>
                 <td className="px-4 py-3 font-medium text-gray-800">{s.name}</td>
+                <td className="px-4 py-3 text-gray-500">{s.phone || "-"}</td>
                 <td className="px-4 py-3">{s.avgDeliveryDays} days</td>
                 <td className="px-4 py-3">{s.recommendationScore}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        {suppliers.length === 0 && (
+          <p className="text-center text-gray-400 py-8 text-sm">No suppliers yet. Add your first one.</p>
+        )}
       </div>
     </div>
   );

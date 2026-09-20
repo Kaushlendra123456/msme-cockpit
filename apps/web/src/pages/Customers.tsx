@@ -6,6 +6,8 @@ interface CustomerInsight {
   id: string;
   name: string;
   totalSpent: number;
+  creditLimit: number;
+  outstandingCredit: number;
   isHighValue: boolean;
   isInactive: boolean;
 }
@@ -80,6 +82,7 @@ export const Customers = () => {
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Total Spent</th>
               <th className="px-4 py-3">AI Tag</th>
+              <th className="px-4 py-3">Outstanding Credit</th>
               <th className="px-4 py-3">Credit Limit</th>
             </tr>
           </thead>
@@ -101,13 +104,23 @@ export const Customers = () => {
                   )}
                 </td>
                 <td className="px-4 py-3">
+                  {Number(c.outstandingCredit) > 0 ? (
+                    <span className="text-amber-600 font-medium">
+                      ₹{Number(c.outstandingCredit).toLocaleString("en-IN")}
+                    </span>
+                  ) : (
+                    <span className="text-gray-400">₹0</span>
+                  )}
+                </td>
+                <td className="px-4 py-3">
                   {!canManageCredit ? (
-                    <span className="text-xs text-gray-300">—</span>
+                    <span className="text-xs text-gray-300">₹{Number(c.creditLimit).toLocaleString("en-IN")}</span>
                   ) : editingLimitFor === c.id ? (
                     <div className="flex gap-1">
                       <input
                         type="number"
                         autoFocus
+                        placeholder={String(c.creditLimit)}
                         value={limitValue}
                         onChange={(e) => setLimitValue(e.target.value)}
                         className="w-24 border border-gray-300 rounded px-2 py-1 text-xs"
@@ -123,11 +136,11 @@ export const Customers = () => {
                     <button
                       onClick={() => {
                         setEditingLimitFor(c.id);
-                        setLimitValue("");
+                        setLimitValue(String(c.creditLimit));
                       }}
-                      className="text-xs text-brand-600 underline"
+                      className="text-xs text-brand-700 font-medium hover:underline"
                     >
-                      Set Limit
+                      ₹{Number(c.creditLimit).toLocaleString("en-IN")} <span className="text-gray-400">(edit)</span>
                     </button>
                   )}
                 </td>

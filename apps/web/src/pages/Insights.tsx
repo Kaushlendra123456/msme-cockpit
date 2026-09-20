@@ -148,7 +148,15 @@ export const Insights = () => {
         </div>
 
         {forecastError ? (
-          <p className="text-sm text-gray-400">{forecastError}</p>
+          <div className="space-y-2">
+            <p className="text-sm text-gray-400">{forecastError}</p>
+            <button
+              onClick={() => loadForecast(horizon)}
+              className="text-xs text-brand-600 font-medium underline"
+            >
+              Try Again
+            </button>
+          </div>
         ) : !forecast ? (
           <p className="text-sm text-gray-400">Loading forecast...</p>
         ) : (
