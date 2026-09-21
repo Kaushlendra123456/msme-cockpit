@@ -7,7 +7,7 @@ import { prisma } from "../../src/config/prisma";
 // (2) decrement Product stock, (3) write an InventoryLedger entry,
 // (4) update the Customer's credit balance when sold on credit, and
 // (5) enforce the customer's credit limit. This hits a real Postgres
-// test database — nothing here is mocked — so it catches bugs a pure
+// test database - nothing here is mocked - so it catches bugs a pure
 // unit test on calculateGst() or wouldExceedCreditLimit() alone can't.
 
 const app = createApp();
@@ -68,7 +68,7 @@ afterAll(async () => {
   await prisma.$disconnect();
 });
 
-describe("POST /api/v1/sales — full transaction flow", () => {
+describe("POST /api/v1/sales - full transaction flow", () => {
   it("creates a sale with correct GST totals, decrements stock, and writes a ledger entry", async () => {
     const beforeProduct = await authedGet(`/api/v1/products/${productId}`);
     const stockBefore = beforeProduct.body.stockQuantity;
@@ -80,7 +80,7 @@ describe("POST /api/v1/sales — full transaction flow", () => {
 
     expect(saleRes.status).toBe(201);
     // 3 units * ₹200 = ₹600 subtotal, 18% GST = ₹108, total ₹708
-    // Prisma Decimal fields serialize as strings in JSON — wrap in Number() before comparing.
+    // Prisma Decimal fields serialize as strings in JSON - wrap in Number() before comparing.
     expect(Number(saleRes.body.subtotal)).toBe(600);
     expect(Number(saleRes.body.gstAmount)).toBe(108);
     expect(Number(saleRes.body.totalAmount)).toBe(708);
@@ -108,7 +108,7 @@ describe("POST /api/v1/sales — full transaction flow", () => {
 
     expect(saleRes.status).toBe(400);
 
-    // Stock must be unchanged — the whole transaction should have rolled back.
+    // Stock must be unchanged - the whole transaction should have rolled back.
     const afterProduct = await authedGet(`/api/v1/products/${productId}`);
     expect(afterProduct.body.stockQuantity).toBe(stockBefore);
   });

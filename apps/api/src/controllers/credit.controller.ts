@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "../config/prisma";
 import { recordPaymentReceived } from "../services/credit.service";
 
-// Overview of every customer's outstanding credit — the core "Credit Ledger"
+// Overview of every customer's outstanding credit - the core "Credit Ledger"
 // screen. Flags anyone over 30 days since their last purchase with an
 // outstanding balance as potentially overdue (simple, explainable rule).
 export const getCreditOverview = async (req: Request, res: Response) => {

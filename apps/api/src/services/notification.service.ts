@@ -41,7 +41,7 @@ export const notifyNewSale = async (
       businessId: params.businessId,
       type: "NEW_SALE",
       title: "New sale recorded",
-      message: `Invoice ${params.invoiceNumber} — ₹${params.totalAmount.toFixed(2)}`,
+      message: `Invoice ${params.invoiceNumber} - ₹${params.totalAmount.toFixed(2)}`,
       referenceId: params.saleId,
     },
   });

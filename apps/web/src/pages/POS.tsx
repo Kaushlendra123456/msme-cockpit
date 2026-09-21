@@ -18,8 +18,8 @@ interface CartLine {
   quantity: number;
 }
 
-// This is the "POS Mode" screen — quick billing at a shop counter.
-// Search product, add to cart, hit checkout — creates a Sale via the API,
+// This is the "POS Mode" screen - quick billing at a shop counter.
+// Search product, add to cart, hit checkout - creates a Sale via the API,
 // which handles GST calculation and stock deduction on the backend.
 interface Customer {
   id: string;
@@ -90,7 +90,7 @@ export const POS = () => {
         paymentStatus,
         customerId: customerId || undefined,
       });
-      setMessage(`Sale recorded — Invoice ${res.data.invoiceNumber}`);
+      setMessage(`Sale recorded - Invoice ${res.data.invoiceNumber}`);
       setLastSaleId(res.data.id);
       setCart([]);
       setCustomerId("");
@@ -116,7 +116,7 @@ export const POS = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-4">
-        <h2 className="text-xl font-bold text-gray-800">Sales — POS Mode</h2>
+        <h2 className="text-xl font-bold text-gray-800">Sales - POS Mode</h2>
         <input
           placeholder="Search product to add..."
           value={search}

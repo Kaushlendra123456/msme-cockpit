@@ -30,7 +30,7 @@ interface PurchaseRecord {
   items: { quantity: number }[];
 }
 
-// Purchase order entry — Owner/Manager only (enforced by backend too).
+// Purchase order entry - Owner/Manager only (enforced by backend too).
 // Selecting a product and adding it here creates a purchase order that,
 // on submit, automatically increases stock (handled server-side).
 export const Purchases = () => {
@@ -80,7 +80,7 @@ export const Purchases = () => {
         supplierId: supplierId || undefined,
         items: items.map((i) => ({ productId: i.productId, quantity: i.quantity, unitCost: i.unitCost })),
       });
-      setMessage("Purchase order recorded — stock updated.");
+      setMessage("Purchase order recorded - stock updated.");
       setItems([]);
       setSupplierId("");
       loadPurchases();

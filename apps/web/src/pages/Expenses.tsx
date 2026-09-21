@@ -37,7 +37,7 @@ export const Expenses = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-bold text-gray-800">Finance — Expenses</h2>
+      <h2 className="text-xl font-bold text-gray-800">Finance - Expenses</h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
         {Object.entries(byCategory).map(([cat, amt]) => (

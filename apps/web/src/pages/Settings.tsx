@@ -101,7 +101,7 @@ export const Settings = () => {
             <h3 className="font-semibold text-gray-800">Database Backup</h3>
           </div>
           <p className="text-sm text-gray-500 mb-4">
-            Download a full backup of your business database. Store it somewhere safe — this
+            Download a full backup of your business database. Store it somewhere safe - this
             file can restore all your data if something goes wrong.
           </p>
           <button
