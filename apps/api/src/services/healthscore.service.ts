@@ -7,6 +7,29 @@ import { prisma } from "../config/prisma";
 // - Expense control (expenses as a % of revenue, lower is better)
 // Each signal is normalized to 0-25 points.
 export const computeHealthScore = async (businessId: string) => {
+  // If the business has no transaction history at all yet, don't compute a
+  // misleading score from empty-data defaults — be honest that there's
+  // nothing to evaluate yet.
+  const [anySale, anyProduct, anyExpense] = await Promise.all([
+    prisma.sale.count({ where: { businessId } }),
+    prisma.product.count({ where: { businessId } }),
+    prisma.expense.count({ where: { businessId } }),
+  ]);
+
+  if (anySale === 0 && anyProduct === 0 && anyExpense === 0) {
+    return {
+      id: null,
+      businessId,
+      score: 0,
+      revenueGrowth: 0,
+      profitMargin: 0,
+      inventoryEfficiency: 0,
+      expenseControl: 0,
+      computedAt: new Date(),
+      status: "Not enough data yet",
+    };
+  }
+
   const now = new Date();
   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);

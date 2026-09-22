@@ -69,7 +69,8 @@ export const Products = () => {
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full text-sm min-w-[640px]">
           <thead className="bg-gray-50 text-gray-500 text-left">
             <tr>
               <th className="px-4 py-3">Name</th>
@@ -103,11 +104,12 @@ export const Products = () => {
             ))}
           </tbody>
         </table>
+        </div>
         {products.length === 0 && (
           <p className="text-center text-gray-400 py-8 text-sm">No products yet. Add your first one.</p>
         )}
       </div>
-
+      
       {showForm && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-20 px-4">
           <div className="bg-white rounded-xl p-6 w-full max-w-md">

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Bell, LogOut } from "lucide-react";
+import { Bell, LogOut, Menu } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../lib/api";
 
@@ -12,7 +12,11 @@ interface NotificationItem {
   createdAt: string;
 }
 
-export const Navbar = () => {
+interface NavbarProps {
+  onOpenMobileMenu: () => void;
+}
+
+export const Navbar = ({ onOpenMobileMenu }: NavbarProps) => {
   const { user, logout } = useAuth();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -28,8 +32,6 @@ export const Navbar = () => {
 
   useEffect(() => {
     loadNotifications();
-    // Simple polling - good enough for an MSME dashboard; could be swapped
-    // for a Socket.io push event later without changing this component's API.
     const interval = setInterval(loadNotifications, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -50,12 +52,19 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-10">
-      <div>
-        <p className="text-sm text-gray-400">Welcome back,</p>
-        <p className="font-semibold text-gray-800">{user?.name}</p>
+    <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-3 sm:px-6 sticky top-0 z-20">
+      <div className="flex items-center gap-3 min-w-0">
+        {/* Hamburger — mobile only */}
+        <button onClick={onOpenMobileMenu} className="lg:hidden text-gray-500 flex-shrink-0">
+          <Menu size={22} />
+        </button>
+        <div className="min-w-0">
+          <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Welcome back,</p>
+          <p className="font-semibold text-gray-800 text-sm sm:text-base truncate">{user?.name}</p>
+        </div>
       </div>
-      <div className="flex items-center gap-4">
+
+      <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setOpen((o) => !o)}
@@ -70,7 +79,7 @@ export const Navbar = () => {
           </button>
 
           {open && (
-            <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg max-h-96 overflow-y-auto z-20">
+            <div className="fixed sm:absolute right-2 sm:right-0 left-2 sm:left-auto top-16 sm:top-auto mt-0 sm:mt-2 w-auto sm:w-80 bg-white border border-gray-200 rounded-xl shadow-lg max-h-96 overflow-y-auto z-50">
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                 <p className="text-sm font-semibold text-gray-700">Notifications</p>
                 {unreadCount > 0 && (
@@ -100,8 +109,8 @@ export const Navbar = () => {
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center text-sm font-semibold">
+        <div className="hidden sm:flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center text-sm font-semibold flex-shrink-0">
             {user?.name?.[0]?.toUpperCase() || "U"}
           </div>
           <div className="text-xs">

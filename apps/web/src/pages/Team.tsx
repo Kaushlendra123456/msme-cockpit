@@ -69,53 +69,55 @@ export const Team = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500 text-left">
-              <tr>
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Email</th>
-                <th className="px-4 py-3">Role</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {members.map((m) => (
-                <tr key={m.id} className="border-t border-gray-100">
-                  <td className="px-4 py-3 font-medium text-gray-800">{m.name}</td>
-                  <td className="px-4 py-3 text-gray-500">{m.email}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        m.role === "OWNER"
-                          ? "bg-brand-50 text-brand-700"
-                          : m.role === "MANAGER"
-                          ? "bg-emerald-50 text-emerald-600"
-                          : "bg-gray-100 text-gray-600"
-                      }`}
-                    >
-                      {m.role}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className={m.isActive ? "text-emerald-600 text-xs" : "text-red-500 text-xs"}>
-                      {m.isActive ? "Active" : "Deactivated"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    {m.role !== "OWNER" && (
-                      <button
-                        onClick={() => toggleActive(m)}
-                        className="text-xs text-gray-500 underline"
-                      >
-                        {m.isActive ? "Deactivate" : "Reactivate"}
-                      </button>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
+              <thead className="bg-gray-50 text-gray-500 text-left">
+                <tr>
+                  <th className="px-4 py-3">Name</th>
+                  <th className="px-4 py-3">Email</th>
+                  <th className="px-4 py-3">Role</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {members.map((m) => (
+                  <tr key={m.id} className="border-t border-gray-100">
+                    <td className="px-4 py-3 font-medium text-gray-800">{m.name}</td>
+                    <td className="px-4 py-3 text-gray-500">{m.email}</td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          m.role === "OWNER"
+                            ? "bg-brand-50 text-brand-700"
+                            : m.role === "MANAGER"
+                            ? "bg-emerald-50 text-emerald-600"
+                            : "bg-gray-100 text-gray-600"
+                        }`}
+                      >
+                        {m.role}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={m.isActive ? "text-emerald-600 text-xs" : "text-red-500 text-xs"}>
+                        {m.isActive ? "Active" : "Deactivated"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {m.role !== "OWNER" && (
+                        <button
+                          onClick={() => toggleActive(m)}
+                          className="text-xs text-gray-500 underline"
+                        >
+                          {m.isActive ? "Deactivate" : "Reactivate"}
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div className="bg-white rounded-xl border border-gray-200 p-5 h-fit">
