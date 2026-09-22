@@ -1,4 +1,4 @@
-// Minimal CSV generator — no external dependency needed for straightforward
+// Minimal CSV generator - no external dependency needed for straightforward
 // tabular exports. Handles commas/quotes/newlines in values correctly.
 
 export const toCsv = (rows: Record<string, any>[]): string => {

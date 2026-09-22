@@ -18,7 +18,7 @@ const createSaleSchema = z.object({
 });
 
 // This is the core POS transaction: creates the invoice, GST breakdown,
-// decrements stock, and writes an inventory ledger entry — all atomically.
+// decrements stock, and writes an inventory ledger entry - all atomically.
 export const createSale = async (req: Request, res: Response) => {
   const parsed = createSaleSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -105,7 +105,7 @@ export const createSale = async (req: Request, res: Response) => {
         data: { totalSpent: { increment: totalAmount }, lastPurchaseAt: new Date() },
       });
 
-      // If this sale wasn't fully paid upfront, it's a credit sale —
+      // If this sale wasn't fully paid upfront, it's a credit sale -
       // record it in the ledger and enforce the customer's credit limit.
       if (paymentStatus !== "PAID") {
         await recordCreditSale(tx, {

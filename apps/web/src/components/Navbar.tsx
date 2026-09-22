@@ -28,7 +28,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     loadNotifications();
-    // Simple polling — good enough for an MSME dashboard; could be swapped
+    // Simple polling - good enough for an MSME dashboard; could be swapped
     // for a Socket.io push event later without changing this component's API.
     const interval = setInterval(loadNotifications, 30000);
     return () => clearInterval(interval);

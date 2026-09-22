@@ -3,7 +3,7 @@ info:
   title: MSME AI Operating Cockpit API
   version: "1.0.0"
   description: >
-    REST API for the MSME Operating Cockpit — covers authentication, core
+    REST API for the MSME Operating Cockpit - covers authentication, core
     business operations (products, inventory, sales, purchases, expenses),
     customer credit ledger, supplier/customer intelligence, dashboards,
     reorder/cash-flow forecasting, notifications and data export/backup.
@@ -81,7 +81,7 @@ paths:
 
   /sales:
     post:
-      summary: Create a sale (POS checkout) — computes GST, decrements stock, records credit ledger entry if unpaid
+      summary: Create a sale (POS checkout) - computes GST, decrements stock, records credit ledger entry if unpaid
       responses:
         "201": { description: Sale created }
         "400": { description: Insufficient stock, or credit limit exceeded }

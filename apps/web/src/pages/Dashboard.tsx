@@ -73,7 +73,7 @@ export const Dashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-5">
-          <p className="text-sm font-semibold text-gray-700 mb-4">Revenue — Last 14 Days</p>
+          <p className="text-sm font-semibold text-gray-700 mb-4">Revenue - Last 14 Days</p>
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={trend}>
               <XAxis dataKey="date" tick={{ fontSize: 11 }} />

@@ -27,7 +27,7 @@ const adjustSchema = z.object({
   note: z.string().optional(),
 });
 
-// Manual stock correction — e.g. damage, theft, physical count mismatch
+// Manual stock correction - e.g. damage, theft, physical count mismatch
 export const adjustStock = async (req: Request, res: Response) => {
   const parsed = adjustSchema.safeParse(req.body);
   if (!parsed.success) {

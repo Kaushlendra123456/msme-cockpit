@@ -2,7 +2,7 @@
 node_modules/
 **/node_modules/
 
-# Environment files (secrets — NEVER push these)
+# Environment files (secrets - NEVER push these)
 .env
 .env.prod
 .env.test

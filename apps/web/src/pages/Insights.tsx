@@ -30,7 +30,7 @@ interface ForecastPoint {
   predicted_cash_balance: number;
 }
 
-// This is the "AI Insights" screen — surfaces the rule-based reorder engine,
+// This is the "AI Insights" screen - surfaces the rule-based reorder engine,
 // business health score, and the AI service's cash-flow forecast.
 export const Insights = () => {
   const [reorders, setReorders] = useState<ReorderSuggestion[]>([]);
@@ -196,7 +196,7 @@ export const Insights = () => {
           </ResponsiveContainer>
         )}
         <p className="text-xs text-gray-400 mt-3">
-          Baseline projection using a linear trend on recent revenue/expenses — treat this as a
+          Baseline projection using a linear trend on recent revenue/expenses - treat this as a
           directional estimate, not a guarantee, especially with limited history.
         </p>
       </div>
@@ -205,7 +205,7 @@ export const Insights = () => {
         <p className="text-sm font-semibold text-gray-700 mb-4">Smart Reorder Suggestions</p>
         {reorders.length === 0 ? (
           <p className="text-sm text-gray-400">
-            No reorder suggestions right now — stock levels look healthy.
+            No reorder suggestions right now - stock levels look healthy.
           </p>
         ) : (
           <div className="space-y-3">

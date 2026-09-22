@@ -6,7 +6,7 @@
 #   docker compose -f docker-compose.prod.yml up -d --build
 #
 # Before running, create a `.env.prod` file in the project root (see
-# .env.prod.example) with real secrets — never commit that file.
+# .env.prod.example) with real secrets - never commit that file.
 
 services:
   postgres:

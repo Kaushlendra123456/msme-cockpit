@@ -25,7 +25,7 @@ export function createApp() {
     const openapiDocument = YAML.load(path.join(__dirname, "..", "openapi.yaml"));
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiDocument));
   } catch (err) {
-    logger.warn("Could not load openapi.yaml — /api-docs will be unavailable");
+    logger.warn("Could not load openapi.yaml - /api-docs will be unavailable");
   }
 
   app.use("/api/v1", routes);

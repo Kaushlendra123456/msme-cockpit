@@ -77,7 +77,7 @@ export const getRevenueTrend = async (req: Request, res: Response) => {
   res.json(trend);
 };
 
-// Finds the product with the highest total quantity sold in the last 7 days —
+// Finds the product with the highest total quantity sold in the last 7 days -
 // for the "This Week's Top Product" quick-stats widget on the dashboard.
 export const getTopProductThisWeek = async (req: Request, res: Response) => {
   const businessId = req.user!.businessId;

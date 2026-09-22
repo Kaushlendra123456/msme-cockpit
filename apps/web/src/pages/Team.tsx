@@ -14,7 +14,7 @@ interface TeamMember {
 }
 
 const ROLE_PRIVILEGES: Record<string, string[]> = {
-  OWNER: ["Everything — full access", "Business settings, backups, team management"],
+  OWNER: ["Everything - full access", "Business settings, backups, team management"],
   MANAGER: ["Products, Inventory, Purchases", "Sales (POS), Customers, Suppliers", "Set customer credit limits"],
   STAFF: ["Sales (POS)", "Inventory adjustments", "View dashboard & reports"],
 };

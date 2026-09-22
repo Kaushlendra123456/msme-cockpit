@@ -4,7 +4,7 @@ Cash flow forecasting service.
 Honest note on approach: MSMEs rarely have enough clean historical data
 (months of consistent daily records) for a complex model like LSTM/Prophet
 to outperform a simple, explainable trend model. So this uses linear
-regression on daily revenue/expenses as the baseline — small, fast,
+regression on daily revenue/expenses as the baseline - small, fast,
 interpretable, and it degrades gracefully with sparse data.
 
 Once a business has 6+ months of consistent data, this is the natural
@@ -20,7 +20,7 @@ from app.schemas.forecast_schemas import HistoricalPoint, ForecastPoint
 
 def _linear_trend_forecast(values: List[float], horizon_days: int) -> List[float]:
     if len(values) < 2:
-        # Not enough data to fit a trend — just repeat the last known value
+        # Not enough data to fit a trend - just repeat the last known value
         last = values[-1] if values else 0.0
         return [last] * horizon_days
 

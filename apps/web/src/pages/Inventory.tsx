@@ -116,7 +116,7 @@ export const Inventory = () => {
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-20 px-4">
           <div className="bg-white rounded-xl p-6 w-full max-w-md">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-800">Adjust Stock — {adjustingProduct.name}</h3>
+              <h3 className="font-semibold text-gray-800">Adjust Stock - {adjustingProduct.name}</h3>
               <button onClick={() => setAdjustingProduct(null)}>
                 <X size={18} className="text-gray-400" />
               </button>

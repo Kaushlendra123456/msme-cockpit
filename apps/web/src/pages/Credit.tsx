@@ -21,7 +21,7 @@ interface LedgerEntry {
   createdAt: string;
 }
 
-// The Customer Credit Ledger screen — tracks "udhaar" given to customers
+// The Customer Credit Ledger screen - tracks "udhaar" given to customers
 // and payments received against it. This is a mandatory module per the
 // capstone brief and was missing from the earlier build.
 export const Credit = () => {

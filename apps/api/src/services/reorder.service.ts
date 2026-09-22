@@ -3,7 +3,7 @@ import { prisma } from "../config/prisma";
 // Rule-based reorder point calculation:
 // reorderPoint = avgDailySales * leadTimeDays
 // recommendedQty = reorderPoint - currentStock + safetyBuffer(avgDailySales * 2)
-// This runs entirely on data we already have — no ML training needed for a
+// This runs entirely on data we already have - no ML training needed for a
 // solid first version. It becomes a good baseline the AI service can later
 // refine with a real demand-forecasting model.
 export const computeReorderSuggestions = async (businessId: string) => {

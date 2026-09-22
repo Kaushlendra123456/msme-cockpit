@@ -88,7 +88,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
   });
   if (!existing) return res.status(404).json({ message: "Product not found" });
 
-  // Soft delete — keeps historical sales/purchase records intact
+  // Soft delete - keeps historical sales/purchase records intact
   await prisma.product.update({ where: { id: req.params.id }, data: { isActive: false } });
   res.json({ message: "Product deleted" });
 };

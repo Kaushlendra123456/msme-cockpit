@@ -1,4 +1,4 @@
-# MSME AI Operating Cockpit — Codebase
+# MSME AI Operating Cockpit - Codebase
 
 A working, containerizable prototype implementing the core MSME ERP modules plus a rule-based
 intelligence layer, a customer credit ledger, notifications, data export/backup, automated
@@ -15,19 +15,19 @@ tests, structured logging, API documentation, and CI/CD.
 - Purchases (auto stock increment)
 - Expenses tracking + category-wise report
 - Customer CRM with rule-based tagging (high-value / inactive)
-- Supplier recommendation — rule-based scoring (rating + delivery speed)
+- Supplier recommendation - rule-based scoring (rating + delivery speed)
 - Dashboard with real financial/sales/inventory aggregates + revenue trend chart
 
 ### Customer Credit Ledger (new)
 - Record a sale as "on credit" (Pending/Partial payment) directly from the POS screen
-- Automatic credit-limit enforcement — a sale that would exceed a customer's limit is blocked
+- Automatic credit-limit enforcement - a sale that would exceed a customer's limit is blocked
 - Payment recording against outstanding credit
 - Full ledger history per customer
 
 ### Intelligence Layer
-- **Smart Reorder Engine** — rule-based (avg daily sales × supplier lead time)
-- **Business Health Score** — rule-based composite (revenue growth, margin, inventory, expense control)
-- **Cash Flow Forecast** — linear-trend baseline model (Python/FastAPI), now connected end-to-end
+- **Smart Reorder Engine** - rule-based (avg daily sales × supplier lead time)
+- **Business Health Score** - rule-based composite (revenue growth, margin, inventory, expense control)
+- **Cash Flow Forecast** - linear-trend baseline model (Python/FastAPI), now connected end-to-end
   to a chart on the Insights page (Node backend aggregates history and proxies to the AI service)
 
 ### Notifications
@@ -40,23 +40,23 @@ tests, structured logging, API documentation, and CI/CD.
 - Full PostgreSQL backup via `pg_dump`, downloadable from Settings (Owner only)
 
 ### Engineering Quality
-- **Automated tests**: 10 Jest tests (backend — GST calculation, credit limit logic) + 6 Pytest
-  tests (AI service — forecasting model), all passing
-- **Structured logging** (Pino) — every request and error is logged as JSON
-- **API documentation** — OpenAPI 3.0 spec served at `/api-docs`
+- **Automated tests**: 10 Jest tests (backend - GST calculation, credit limit logic) + 6 Pytest
+  tests (AI service - forecasting model), all passing
+- **Structured logging** (Pino) - every request and error is logged as JSON
+- **API documentation** - OpenAPI 3.0 spec served at `/api-docs`
 - **Production Dockerfiles** for all three services (Node backend, FastAPI AI service, React
-  frontend via nginx) — see `docker-compose.prod.yml` for running the whole stack containerized
-- **CI pipeline** (GitHub Actions) — type-checks, tests, and builds all three services plus
+  frontend via nginx) - see `docker-compose.prod.yml` for running the whole stack containerized
+- **CI pipeline** (GitHub Actions) - type-checks, tests, and builds all three services plus
   their Docker images on every push/PR
 
 ## Intentionally Not Included
 
 These need external accounts/credentials that can't be faked into working code:
 
-- **Payment Gateway** — `payment.controller.ts` has a clearly-marked Razorpay stub
-- **AI Business Advisor (RAG + LLM)** — needs an LLM API key + embeddings pipeline
-- **WhatsApp Automation** — needs WhatsApp Business API approval
-- **Voice Assistant, Digital Twin, Barcode scanning, PWA offline mode** — Tier 3, not built yet
+- **Payment Gateway** - `payment.controller.ts` has a clearly-marked Razorpay stub
+- **AI Business Advisor (RAG + LLM)** - needs an LLM API key + embeddings pipeline
+- **WhatsApp Automation** - needs WhatsApp Business API approval
+- **Voice Assistant, Digital Twin, Barcode scanning, PWA offline mode** - Tier 3, not built yet
 
 ## Project Structure
 
@@ -136,14 +136,14 @@ docker exec -it msme_api_prod npx prisma migrate deploy
 3. AI Business Advisor: pick an LLM provider, build the embeddings pipeline, complete the
    `advisor_conversations` flow end-to-end
 4. Expand automated tests to cover the sale/inventory transaction flow end-to-end (currently
-   only pure-logic units are tested; integration tests need a test database — the CI pipeline
+   only pure-logic units are tested; integration tests need a test database - the CI pipeline
    already spins one up, so this is the natural next addition)
-5. Formal documentation: C4 architecture diagrams, threat model, evaluation dossier — see the
+5. Formal documentation: C4 architecture diagrams, threat model, evaluation dossier - see the
    separate architecture document for the full picture
 
 ## A Note on Scope
 
-This is a working prototype with real engineering practices layered on top — not the complete
+This is a working prototype with real engineering practices layered on top - not the complete
 long-term product vision. Features like WhatsApp automation, the voice assistant, the RAG-based
 advisor, and the digital twin simulator each require external service accounts and are better
 built as focused, dedicated phases.

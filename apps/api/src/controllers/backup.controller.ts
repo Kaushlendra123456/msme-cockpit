@@ -9,7 +9,7 @@ import os from "os";
  * back as a downloadable file.
  *
  * Requires the `pg_dump` binary to be available in the backend's runtime
- * environment (it ships with the `postgresql-client` package — already
+ * environment (it ships with the `postgresql-client` package - already
  * included in the production Dockerfile for this service). If it's missing
  * locally, this endpoint returns a clear error explaining how to install it,
  * rather than silently failing.
