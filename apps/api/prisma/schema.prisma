@@ -333,3 +333,15 @@ model Notification {
 
   @@index([businessId, isRead])
 }
+// ---------------- Password Reset ----------------
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([token])
+}
