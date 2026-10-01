@@ -61,8 +61,31 @@ export const createSale = async (req: Request, res: Response) => {
         subtotal: lineSubtotal,
       });
 
-      const newStock = product.stockQuantity - item.quantity;
-      await tx.product.update({ where: { id: product.id }, data: { stockQuantity: newStock } });
+      // Atomic conditional decrement: the stock check (stockQuantity >= item.quantity)
+      // and the decrement happen in ONE database statement. Postgres evaluates the
+      // WHERE clause against the row's current committed value at the moment it takes
+      // the row lock for this UPDATE — so even if two requests arrive at the same
+      // instant, Postgres serializes them: the second one re-checks stock against the
+      // value the first one just wrote, not the stale value both of them originally
+      // read. This closes the race window that the old find-then-update pattern left
+      // open, without needing a stricter (and slower) SERIALIZABLE isolation level.
+      const updateResult = await tx.product.updateMany({
+        where: {
+          id: product.id,
+          stockQuantity: { gte: item.quantity },
+        },
+        data: {
+          stockQuantity: { decrement: item.quantity },
+        },
+      });
+
+      if (updateResult.count === 0) {
+        throw { status: 400, message: `Insufficient stock for ${product.name}` };
+      }
+
+      const updatedProduct = await tx.product.findFirst({ where: { id: product.id } });
+      const newStock = updatedProduct!.stockQuantity;
+
       await tx.inventoryLedger.create({
         data: {
           businessId,
