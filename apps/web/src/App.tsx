@@ -16,6 +16,8 @@ import { Reports } from "./pages/Reports";
 import { Settings } from "./pages/Settings";
 import { Team } from "./pages/Team";
 import { Purchases } from "./pages/Purchases";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { user, loading } = useAuth();
@@ -28,6 +30,8 @@ const AppRoutes = () => (
   <Routes>
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
+    <Route path="/forgot-password" element={<ForgotPassword />} />
+    <Route path="/reset-password" element={<ResetPassword />} />
     <Route
       element={
         <ProtectedRoute>

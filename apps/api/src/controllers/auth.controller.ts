@@ -1,3 +1,5 @@
+import crypto from "crypto";
+import { sendPasswordResetEmail } from "../services/email.service";
 import { Request, Response } from "express";
 import { z } from "zod";
 import { prisma } from "../config/prisma";
@@ -173,4 +175,75 @@ export const setTeamMemberActive = async (req: Request, res: Response) => {
     select: { id: true, name: true, email: true, role: true, isActive: true },
   });
   res.json(updated);
+};
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const parsed = forgotPasswordSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Invalid input" });
+  }
+  const { email } = parsed.data;
+
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  // Always return a generic success message, even if the email doesn't
+  // exist — this prevents attackers from using this endpoint to discover
+  // which emails are registered (a common security best practice).
+  const genericResponse = {
+    message: "If an account exists with that email, a reset link has been sent.",
+  };
+
+  if (!user) {
+    return res.json(genericResponse);
+  }
+
+  const token = crypto.randomBytes(32).toString("hex");
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
+  await prisma.passwordResetToken.create({
+    data: { userId: user.id, token, expiresAt },
+  });
+
+  const resetLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password?token=${token}`;
+
+  try {
+    await sendPasswordResetEmail(user.email, resetLink);
+  } catch (err) {
+    // Don't leak email-sending failures to the client — log server-side only
+    console.error("Failed to send password reset email:", err);
+  }
+
+  res.json(genericResponse);
+};
+
+const resetPasswordSchema = z.object({
+  token: z.string(),
+  newPassword: z.string().min(6),
+});
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const parsed = resetPasswordSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Invalid input" });
+  }
+  const { token, newPassword } = parsed.data;
+
+  const resetToken = await prisma.passwordResetToken.findUnique({ where: { token } });
+
+  if (!resetToken || resetToken.used || resetToken.expiresAt < new Date()) {
+    return res.status(400).json({ message: "This reset link is invalid or has expired. Please request a new one." });
+  }
+
+  const passwordHash = await hashPassword(newPassword);
+
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: resetToken.userId }, data: { passwordHash } }),
+    prisma.passwordResetToken.update({ where: { id: resetToken.id }, data: { used: true } }),
+  ]);
+
+  res.json({ message: "Password reset successfully. You can now log in with your new password." });
 };
