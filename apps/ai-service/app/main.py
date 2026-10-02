@@ -18,6 +18,10 @@ app.add_middleware(
 app.include_router(forecast.router)
 
 
-@app.get("/health")
+# UptimeRobot (and most uptime monitors) ping with a HEAD request, not GET —
+# explicitly allowing HEAD here prevents a false "Down" alert (405 Method Not
+# Allowed on HEAD was being misread as the service being down, even though
+# GET requests and the actual AI endpoints were working fine).
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health_check():
     return {"status": "ok"}
